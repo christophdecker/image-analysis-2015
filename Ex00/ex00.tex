@@ -1,0 +1,397 @@
+\documentclass{../uebungsblatt}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{changepage}
+\usepackage{framed}
+\usepackage[normalem]{ulem}
+
+\lvname{Image Analysis\\Summer Semester 2015}
+\autoren{Christoph Decker\\christoph.decker@iwr.uni-heidelberg.de}
+\blatttitel{Exercise 0}
+
+%\def\showsolutions{}
+
+\begin{document}
+
+\lstdefinestyle{customc}{
+    belowcaptionskip=0pt,
+    breaklines=true,
+    xleftmargin=\parindent,
+    language=Python,
+    showstringspaces=false,
+    basicstyle=\footnotesize\ttfamily,
+    keywordstyle=\bfseries\color{green!40!black},
+    commentstyle=\itshape\color{purple!40!black},
+    identifierstyle=\color{blue},
+    stringstyle=\color{orange}
+}
+\lstset{
+    style=customc
+}
+\renewenvironment{leftbar}[1][\hsize]
+{%
+    \def\FrameCommand
+    {%
+        {\color{red}\vrule width 3pt}%
+        \hspace{10pt}%
+        \fboxsep=\FrameSep%
+    }%
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}%
+}
+{\endMakeFramed}
+
+\begin{framed}
+\textbf{Deadline: None}
+\end{framed}
+
+\section*{Computer Setup}
+\subsection*{Windows}
+Download \emph{Python(x,y)} via \url{http://code.google.com/p/pythonxy/wiki/Downloads}
+and install it. Make sure that -- before installation -- the installer does not complain about an existing Python version on your computer.
+
+Although \emph{Python(x,y)} comes already with a great variety of scientific \emph{Python} packages, we might have to install additional dependencies. For instance, we will make use of the \emph{vigranumpy} and \emph{scikit-learn}
+packages which you can download and install from this website:
+
+\url{http://www.lfd.uci.edu/~gohlke/pythonlibs/}
+
+To be able to install these packages, you need the program \emph{pip} which you can find here:
+
+\url{https://pip.pypa.io/en/latest/installing.html}
+
+Now you can test whether your installation was successful: Find the Python(x,y) folder in the Windows start menu and launch the contained Spyder program. In the interactive interpreter on the bottom right, enter:
+\begin{lstlisting}
+import vigra
+import numpy
+import sklearn
+\end{lstlisting}
+If no output appears, your installation was successful.
+
+\subsection*{Ubuntu}
+
+Either compile everything yourself, use \emph{pip}, or just execute the following 
+line to install the system libraries we need:
+
+\begin{lstlisting}
+ sudo apt-get install build-essential python-dev python-numpy python-setuptools python-scipy libatlas-dev libatlas3-base python-matplotlib python-vigra python-sklearn spyder
+\end{lstlisting}
+
+If you want to start GUI programs such as \texttt{spyder}, always start
+them from the terminal; this way they inherit all necessary environment
+variables that have been set in \texttt{\~{}/.bashrc}.
+
+\subsection*{Mac}
+Install Homebrew (\url{http://brew.sh}) by running this command:
+\begin{lstlisting}
+ ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+\end{lstlisting}
+
+If you get errors here, follow these instructions: \\
+\url{http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/}
+
+Then, insert the Homebrew directory at the top of your \texttt{PATH} variable by 
+adding the following line at the bottom of your \texttt{\~{}/.bash\_profile} file:
+\begin{lstlisting}
+ export PATH=/usr/local/bin:$PATH
+\end{lstlisting}
+
+Now open a new terminal and run the following command:
+\begin{lstlisting}
+ brew doctor
+\end{lstlisting}
+
+As long as you do not get \texttt{Your system is ready to brew}, try to fix the warnings.
+
+In the next step, you can install Python using Homebrew via 
+\begin{lstlisting}
+ brew install python
+\end{lstlisting}
+
+You can then install most python packages using \emph{pip}:
+\begin{lstlisting}
+ pip install numpy
+ pip install scikit-learn
+ pip install matplotlib
+ pip install scipy
+ pip install scikit-image
+ pip install spyder
+\end{lstlisting}
+
+Note that it is not possible to install \emph{vigranumpy} like that. In case you need this dependency for your project, we can assist you installing it.
+
+\emph{Troubleshooting}:
+\begin{itemize}
+ \item If \lstinline!pip install scipy! fails, you might have to run \lstinline!brew install gfortran! first.
+ \item If \lstinline!pip install matplotlib! fails, try to do the following
+  \begin{lstlisting}
+   brew install freetype
+   brew install libpng
+   brew link --force freetype
+  \end{lstlisting}
+  and then reinstall \lstinline!scipy!.
+\end{itemize}
+
+
+
+\section*{The Scientific Python Ecosystem}
+
+In this course, we are going to use the \emph{Python} programming language.
+There exist many highly usable and well maintained scientific libraries for
+Python. Packages that will be useful for us are:
+\begin{itemize}
+\item\emph{numpy} (\url{numpy.org}), provides multi-dimensional arrays
+and fast numeric routines that work with these arrays.
+%
+\item\emph{scipy} (\url{scipy.org}), a collection of many scientific algorithms for areas such as optimization, linear algebra, integration, interpolation,
+Fourier transforms, signal and image processing. Makes use of numpy arrays.
+%
+\item\emph{matplotlib} (\url{matplotlib.org}), a plotting library which provides
+a MATLAB like interface. Check out the great gallery with many examples.
+%
+\item\emph{scikit-learn} (\url{scikit-learn.org}), a quickly growing collection
+of machine learning algorithms, such as Support Vector Machines, Decision Trees,
+Nearest Neighbor Methods and many more. Their website offers good overview
+documentation and great examples, too.
+%
+\item\emph{scikit-image} (\url{scikit-image.org}), a collection of image
+processing algorithms.
+%
+\item\emph{vigranumpy} (\url{hci.iwr.uni-heidelberg.de/vigra}), a
+C++ library for multidimensional arrays, image processing and machine learning,
+developed in our group. It exposes most functions to Python via the 
+vigranumpy module.
+\end{itemize}
+
+All of these packages can be easily installed on recent Linux distributions,
+such as Ubuntu.
+
+\paragraph{Coming from MATLAB?}
+Read \url{http://www.scipy.org/NumPy_for_Matlab_Users}. Indexing starts at
+zero in numpy!
+
+\paragraph{IPython}
+For an interactive python shell, start \texttt{ipython} within a shell.
+It supports auto-completion using the tab key, as well as showing the
+documentation of functions by appending a \texttt{?} to the function name.
+%Recent version of IPython have added the \emph{IPython notebook}, a
+%``web-based interactive computational environment where you can combine
+%code execution, text, mathematics, plots and rich media into a single
+%document''. You may want to use it writing up your solutions:
+%\url{ipython.org/notebook.html}.
+
+\paragraph{Spyder}
+Spyder (\url{http://code.google.com/p/spyderlib}) is a MATLAB-like IDE
+for scientific Python. You can use the editor on the left or the 
+interactive interpreter on the bottom right, just like in MATLAB.
+
+\subsection*{Python}
+
+For an introduction to Python, we recommend
+\url{http://docs.python.org/tutorial}, sections 1 through 9. In the following, we give a very brief overview of the language in order to get you started quickly. 
+
+\paragraph{Indentation}
+Python uses \emph{indentation} to group statements as opposed to curly braces
+in C-like languages. Always indent using 4 spaces. Also note that braces
+around statements following \lstinline!if!, \lstinline!for!, etc. are omitted;
+instead, a colon \lstinline!:! at the end is used.
+\vspace*{-0.5em}\begin{lstlisting}
+if a == 42:
+    for i in range(5):
+        print i
+else:
+    b = 5
+\end{lstlisting}\vspace*{-0.5em}
+
+\paragraph{Variables}
+Python, as a scripting language, uses dynamic typing.
+\vspace*{-0.5em} \begin{lstlisting}
+a = 42                   #int
+b1, b2 = 42.0, float(42) #float, cast to float
+c = MyClass(a)           #instance of MyClass
+d = None                 #special 'none' type
+e = "Hello"              #string
+f = [1,2,3]              #a list of values (mutable), f[0]=1
+g = (1,2,3)              #a tuple of values (immutable), g[0]=1
+h = {"x": 1, "y": 2}     #a dictionary h['x']=1, h['y']=2
+\end{lstlisting}\vspace*{-0.5em}
+
+\paragraph{Functions}
+Functions are declared with \lstinline!def!. They take a list of required
+arguments and optional keyword arguments (with default values), and may \lstinline!return! values.
+\vspace*{-0.5em} \begin{lstlisting}
+def some_func(arg1, arg2, kwarg1=True, kwarg2=42):
+    return arg1 + arg2
+\end{lstlisting}\vspace*{-0.5em}
+
+\paragraph{Control Flow}
+if, elif, else:
+\vspace*{-0.5em} \begin{lstlisting}
+if (a or b) and c:
+    print "x"
+elif b:
+    print "y"
+else:
+    print "z"
+\end{lstlisting}\vspace*{-0.5em}
+A for loop:
+\vspace*{-0.5em} \begin{lstlisting}
+for i in range(0,10): # range [0,10)
+    print i
+    if i < 2:
+        continue
+    if i >= 7:
+        break
+\end{lstlisting}\vspace*{-0.5em}
+
+\paragraph{Lists, tuples and slicing}
+List, tuple or strings can be subscripted using \emph{slice notation}.
+\vspace*{-0.5em} \begin{lstlisting}
+s = "Hello"
+print s[1:]
+print s[2:4]
+print s[0:-1:2]
+print s[::2]
+\end{lstlisting}\vspace*{-0.5em}
+
+\paragraph{Modules}
+Additional functionality can be accessed by importing \emph{modules}.
+If you want to import only parts of a module, use the
+\lstinline!from module import symbol! notation, where the function
+can be optionally renamed using \lstinline!as!:
+\vspace*{-0.5em}
+\lstinputlisting[language=Python]{stuff/cos.py}
+\vspace*{-1.0em}
+Every python file you write can be imported from you in other files:
+If file \texttt{file1.py} defines a function \texttt{function1},
+you can use it from \texttt{file2.py} in the same directory via
+\texttt{from file1 import function1}.
+
+\paragraph{Files}
+Write \lstinline!import! statements always at the beginning of your python
+file.\\
+Always put your main function in \lstinline!if __name__ == "__main__"! at
+the end of the file. This way, the main code won't be executed if you import
+this file from another file.
+
+\subsection*{Numpy}
+
+A good tutorial for numpy can be found at
+\url{http://www.scipy.org/Tentative_NumPy_Tutorial}.
+
+Import the numpy module via \lstinline!import numpy!
+
+\paragraph{Creating and calculating with arrays}
+\vspace*{0.25em}
+\lstinputlisting[language=Python]{stuff/numpy_01.py}
+\vspace*{-1.0em}
+
+\paragraph{Array slicing}
+Slicing works similar to the slicing of lists, tuples and strings as introduced
+above. For multi-dimensional arrays, a slicing for each dimension is given
+(comma separated).
+Please see \url{http://docs.scipy.org/doc/numpy/reference/arrays.indexing.html}
+for a comprehensive overview.
+\vspace*{-1em}
+\lstinputlisting[language=Python]{stuff/numpy_02.py}
+\vspace*{-1.0em}
+
+\paragraph{numpy.where}
+To find the indices in an array where a certain condition matches, use
+\lstinline!numpy.where!. The returned tuple of indices can be passed as an
+argument to the \lstinline![]! operator of any array:
+\vspace*{-0.5em}
+\lstinputlisting[language=Python]{stuff/numpy_where.py}
+\vspace*{-1.0em}
+
+\subsection*{Vigra}
+Import the \emph{vigranumpy} module using \lstinline!import vigra!.
+
+The documentation can be found at 
+\url{http://hci.iwr.uni-heidelberg.de/vigra/doc/vigranumpy/index.html}.
+
+\emph{vigranumpy} may be used, among many other functions, to read in images as \lstinline!numpy!
+arrays or write them out to file\footnote{If you did not manage to install \emph{vigra} on your machine, you might want to check out \emph{scikit-image} for some of those operations.}:
+\vspace*{-0.5em} \begin{lstlisting}
+import vigra
+img = vigra.impex.readImage('./myImage.png')
+img.shape
+# red channel
+img = img[...,0]
+img.shape
+vigra.impex.writeImage(img, './redChannel.png')
+\end{lstlisting}\vspace*{-0.5em}
+
+Note that many functions expect the array to be of a certain data type.
+If you get errors like
+\begin{tiny}
+\begin{verbatim}
+Boost.Python.ArgumentError: Python argument types in
+    vigra.filters.gaussianSmoothing(numpy.ndarray, int)
+did not match C++ signature:
+    gaussianSmoothing(vigra::NumpyArray<4u, vigra::Multiband<float>, vigra::StridedArrayTag> array,
+                      boost::python::api::object sigma, vigra::NumpyArray<4u, vigra::Multiband<float>, vigra::StridedArrayTag> out=None,
+                      boost::python::api::object sigma_d=0.0, boost::python::api::object step_size=1.0, double window_size=0.0,
+                      boost::python::api::object roi=None)
+    gaussianSmoothing(vigra::NumpyArray<3u, vigra::Multiband<float>, vigra::StridedArrayTag> array, boost::python::api::object sigma,
+                      vigra::NumpyArray<3u, vigra::Multiband<float>, vigra::StridedArrayTag> out=None, boost::python::api::object sigma_d=0.0,
+                      boost::python::api::object step_size=1.0, double window_size=0.0, boost::python::api::object roi=None)
+\end{verbatim}
+\end{tiny}
+you have forgotten to cast to the correct data type (note that it searches
+above for a\\\verb!vigra::NumpyArray<4u, vigra::Multiband<float>, vigra::StridedArrayTag>!, which has pixel type float).
+In this case, you can cast to 32-bit float using \lstinline!array.astype(numpy.float32)!.
+Other vigra functions may use data type \lstinline!numpy.uint8! or \lstinline!numpy.uint32!.
+Additionally, check that your array has the correct shape, in this case, the
+function expects an array with \lstinline!ndim == 3! or \lstinline!ndim == 4!.
+
+\subsection*{Matplotlib}
+The recommended way to import matplotlib is:
+\vspace*{-0.5em} \begin{lstlisting}
+import matplotlib; matplotlib.use("Qt4Agg")
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import pyplot as plot
+\end{lstlisting}\vspace*{-0.5em}
+See \url{http://matplotlib.org/gallery.html} to copy/paste some code.
+
+\paragraph{Example: read and display image.}
+\vspace*{1ex}
+\lstinputlisting[language=Python]{stuff/read_img.py}
+
+\subsection*{Other libraries}
+
+There is a vast amount of other useful image processing and machine learning libraries for Python, such as \emph{OpenCV}, \emph{Scikit-learn} or \emph{PIL}. So whenever you are looking for a basic or special functionality, make sure to search for a matching library before starting to implement it yourself from scratch.
+
+\section*{Exercises (optional, no points)}
+
+\begin{enumerate}
+\item Write a program that prints the numbers from 1 to 100. But for multiples of
+three print ``Fizz'' instead of the number and for the multiples of five print
+``Buzz''. For numbers which are multiples of both three and five print ``FizzBuzz''. {\tiny(\url{http://imranontech.com/2007/01/24/using-fizzbuzz-to-find-developers-who-grok-coding})}
+ \item Plot $sin(x)$ for $x\in \[-1,1\]$. Label the axes and add a title. Then save the figure as \emph{png}. 
+    \begin{adjustwidth}{2.5em}{0pt}
+      \paragraph{Implementation hints:}
+	Use \lstinline!numpy! and \lstinline!matplotlib.pyplot!.
+    \end{adjustwidth}
+ \item Write a function computing $n!$ and call the function from your \emph{main} function for $n=5$.
+ \item Find and output the eigenvalues and eigenvectors of the following matrix:
+\begin{equation}
+ A = \left(\begin{array}{ccc}4 & 0 & -2\\ 2 & 5 & 4 \\ 0 & 0 & 5\end{array}\right)
+\end{equation}
+%solution:
+%import numpy as np
+%a = np.array([[4,0,-2],[2,5,4],[0,0,5]])
+%ev, evec = np.linalg.eig(a)
+Now concatenate the eigenvectors as columns in a matrix $P$, compute $P^{-1}$, and confirm that
+$P \cdot \Lambda \cdot P^{-1} == A$, where $\Lambda$ is the diagonal matrix of the eigenvalues of $A$.
+\begin{adjustwidth}{2.5em}{0pt}
+      \paragraph{Implementation hints:}	
+      Check out the documentation page of \lstinline!numpy.linalg! for eigenvalue computation and matrix inversion. Be aware that just typing $A*B$ in Python is not a real matrix multiplication.
+\end{adjustwidth}
+%solution:
+%evecInv = np.linalg.inv(evec)
+%b = np.dot(evec, np.dot(np.diag(ev),evecInv))
+%np.all(a == b)
+\end{enumerate}
+
+\end{document}
